@@ -2,6 +2,7 @@ package com.example.templete.domain.todo.controller;
 
 import com.example.templete.domain.todo.model.TodoResponse;
 import com.example.templete.domain.todo.service.TodoService;
+import com.example.templete.global.common.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class TodoController {
     }
 
     @GetMapping("/{todoId}")
-    public TodoResponse selectTodoById(@PathVariable int todoId) {
-        return todoService.selectTodoById(todoId);
+    public ApiResponse<TodoResponse> selectTodoById(@PathVariable int todoId) {
+        return ApiResponse.success(todoService.selectTodoById(todoId));
     }
 }
