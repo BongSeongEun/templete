@@ -2,7 +2,7 @@ create table user
 (
     user_id        int auto_increment
         primary key,
-    user_uuid      uuid        default uuid()      not null,
+    user_uuid      char(36)        default (uuid())      not null,
     user_name      varchar(20)                     not null,
     login_id       varchar(50)                     not null,
     login_password varchar(50)                     not null,

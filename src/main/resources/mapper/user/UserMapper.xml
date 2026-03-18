@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.templete.domain.user.mapper.UserMapper">
+    <select id="selectUserById" resultType="UserLoginResponse">
+        SELECT
+            user_uuid, login_password, user_name, role
+        FROM user
+        WHERE login_id = #{loginId}
+    </select>
+
+    <insert id="insertUser">
+        INSERT INTO user (user_name, login_id, login_password)
+        VALUES (#{userName}, #{loginId}, #{loginPassword})
+    </insert>
+</mapper>

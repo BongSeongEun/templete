@@ -20,7 +20,7 @@ public class TodoService {
     public TodoResponse selectTodoById(int todoId) {
         TodoResponse todoResponse = todoMapper.selectTodoById(todoId);
         if(todoResponse == null) {
-            throw new BaseException(ErrorCode.NOT_FOUND);
+            throw new BaseException(ErrorCode.TODO_NOT_FOUND);
         }
         return todoResponse;
     }
