@@ -1,7 +1,6 @@
 package com.example.templete.domain.todo.service;
 
 import com.example.templete.domain.todo.mapper.TodoMapper;
-import com.example.templete.domain.todo.model.Todo;
 import com.example.templete.domain.todo.model.TodoResponse;
 import com.example.templete.global.error.BaseException;
 import com.example.templete.global.error.ErrorCode;

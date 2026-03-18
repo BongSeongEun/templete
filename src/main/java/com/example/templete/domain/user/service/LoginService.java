@@ -9,7 +9,6 @@ import com.example.templete.global.common.JwtProvider;
 import com.example.templete.global.error.BaseException;
 import com.example.templete.global.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +42,6 @@ public class LoginService {
         if(!passwordEncoder.matches(userLoginRequest.loginPassword(), userLoginResponse.loginPassword())){
             throw new BaseException(ErrorCode.INVALID_PASSWORD);
         }
-        System.out.println("입력된 비번: " + userLoginRequest.loginPassword());
-        System.out.println("DB에서 가져온 비번: " + userLoginResponse.loginPassword());
         return jwtProvider.createToken(userLoginResponse.userUuid(), userLoginResponse.userName(), userLoginResponse.role());
     }
 

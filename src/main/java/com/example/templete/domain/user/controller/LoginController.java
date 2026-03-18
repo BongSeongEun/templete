@@ -1,6 +1,5 @@
 package com.example.templete.domain.user.controller;
 
-import com.example.templete.domain.user.mapper.UserMapper;
 import com.example.templete.domain.user.model.UserLoginRequest;
 import com.example.templete.domain.user.model.UserSignUpRequest;
 import com.example.templete.domain.user.service.LoginService;
