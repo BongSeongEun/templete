@@ -34,17 +34,17 @@ public class JwtProvider {
         Date now = new Date();
         Date accessTokenValidity = new Date(now.getTime() + accessExpireTime);
         String accessToken = Jwts.builder()
-                .setSubject(userUuid)
+                .subject(userUuid)
                 .claim("userName", userName)
                 .claim("role", role)
-                .setExpiration(accessTokenValidity)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .expiration(accessTokenValidity)
+                .signWith(key)
                 .compact();
 
         Date refreshTokenValidity = new Date(now.getTime() + refreshExpireTime);
         String refreshToken = Jwts.builder()
-                .setExpiration(refreshTokenValidity)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .expiration(refreshTokenValidity)
+                .signWith(key)
                 .compact();
 
         return new TokenInfo(accessToken, refreshToken);
