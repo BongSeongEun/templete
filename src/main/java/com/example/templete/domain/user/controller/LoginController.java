@@ -5,7 +5,10 @@ import com.example.templete.domain.user.model.UserSignUpRequest;
 import com.example.templete.domain.user.service.LoginService;
 import com.example.templete.global.common.ApiResponse;
 import com.example.templete.global.common.TokenInfo;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,9 +28,24 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public ApiResponse<TokenInfo> login(@RequestBody UserLoginRequest userLoginRequest) {
-        TokenInfo token = loginService.login(userLoginRequest);
-        return ApiResponse.success(token);
+    public ApiResponse<Void> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
+        TokenInfo tokenInfo = loginService.login(userLoginRequest);
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", tokenInfo.accessToken())
+                .httpOnly(true)
+                .path("/")
+                .maxAge(600)
+                .build();
+
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokenInfo.refreshToken())
+                .httpOnly(true)
+                .path("/")
+                .maxAge(604800)
+                .sameSite("Strict")
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        return ApiResponse.success();
     }
 
 }
