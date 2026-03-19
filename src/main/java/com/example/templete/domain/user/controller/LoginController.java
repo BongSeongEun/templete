@@ -4,6 +4,7 @@ import com.example.templete.domain.user.model.UserLoginRequest;
 import com.example.templete.domain.user.model.UserSignUpRequest;
 import com.example.templete.domain.user.service.LoginService;
 import com.example.templete.global.common.ApiResponse;
+import com.example.templete.global.common.TokenInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,8 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public ApiResponse<String> login(@RequestBody UserLoginRequest userLoginRequest) {
-        String token = loginService.login(userLoginRequest);
+    public ApiResponse<TokenInfo> login(@RequestBody UserLoginRequest userLoginRequest) {
+        TokenInfo token = loginService.login(userLoginRequest);
         return ApiResponse.success(token);
     }
 

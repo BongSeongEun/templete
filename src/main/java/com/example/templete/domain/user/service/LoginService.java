@@ -6,6 +6,7 @@ import com.example.templete.domain.user.model.UserLoginRequest;
 import com.example.templete.domain.user.model.UserLoginResponse;
 import com.example.templete.domain.user.model.UserSignUpRequest;
 import com.example.templete.global.common.JwtProvider;
+import com.example.templete.global.common.TokenInfo;
 import com.example.templete.global.error.BaseException;
 import com.example.templete.global.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class LoginService {
         userMapper.insertUser(user);
     }
 
-    public String login(UserLoginRequest userLoginRequest) {
+    public TokenInfo login(UserLoginRequest userLoginRequest) {
         UserLoginResponse userLoginResponse = userMapper.selectUserById(userLoginRequest.loginId());
         if (userLoginResponse == null) {
             throw new BaseException(ErrorCode.USER_NOT_FOUND);

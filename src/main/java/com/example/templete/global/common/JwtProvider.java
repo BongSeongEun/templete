@@ -18,7 +18,9 @@ public class JwtProvider {
     @Value("${em.jwt.secret}")
     private String secretKey;
     @Value("${em.jwt.expireTime}")
-    private Long expireTime;
+    private Long accessExpireTime;
+    @Value("${em.jwt.refreshExpireTime}")
+    private Long refreshExpireTime;
 
     private Key key;
 
@@ -27,19 +29,24 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(String userUuid, String userName, Role role) {
-        Claims claims = Jwts.claims().setSubject(userUuid);
-        claims.put("userName", userName);
-        claims.put("role", role);
+    public TokenInfo createToken(String userUuid, String userName, Role role) {
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + expireTime);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(validity)
+        Date accessTokenValidity = new Date(now.getTime() + accessExpireTime);
+        String accessToken = Jwts.builder()
+                .setSubject(userUuid)
+                .claim("userName", userName)
+                .claim("role", role)
+                .setExpiration(accessTokenValidity)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
+        Date refreshTokenValidity = new Date(now.getTime() + refreshExpireTime);
+        String refreshToken = Jwts.builder()
+                .setExpiration(refreshTokenValidity)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        return new TokenInfo(accessToken, refreshToken);
     }
 }

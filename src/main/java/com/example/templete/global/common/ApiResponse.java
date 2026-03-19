@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public record ApiResponse<T>(String code, String message, T data) {
 
     public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<T>("SUCCESS", "요청이 성공적으로 완료되었습니다. ", data);
+        return new ApiResponse<>("SUCCESS", "요청이 성공적으로 완료되었습니다. ", data);
     } // 요청 성공
 
     public static <T> ApiResponse<T> success() {
-        return new ApiResponse<T>("SUCCESS", "요청이 성공적으로 완료되었습니다. ", null);
+        return success(null);
     } // 요청 성공(반환 값 없는 경우)
 
     public static <T> ApiResponse<T> error(ErrorCode errorCode) {
