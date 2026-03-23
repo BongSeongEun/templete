@@ -1,17 +1,20 @@
-package com.example.templete.global.common;
+package com.example.templete.global.security;
 
 import com.example.templete.domain.user.model.Role;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtProvider {
@@ -22,7 +25,7 @@ public class JwtProvider {
     @Value("${em.jwt.refreshExpireTime}")
     private Long refreshExpireTime;
 
-    private Key key;
+    private SecretKey key;
 
     @PostConstruct
     protected void init() {
@@ -48,5 +51,25 @@ public class JwtProvider {
                 .compact();
 
         return new TokenInfo(accessToken, refreshToken);
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public UsernamePasswordAuthenticationToken getAuthentication(String token) {
+        Claims claims = Jwts.parser().verifyWith(key).build()
+                .parseSignedClaims(token).getPayload();
+
+        String userUuid = claims.getSubject();
+        String role = claims.get("role", String.class);
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+
+        return new UsernamePasswordAuthenticationToken(userUuid, null, authorities);
     }
 }
