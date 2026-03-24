@@ -39,7 +39,7 @@ public class LoginController {
     @PostMapping("/renewToken")
     public ApiResponse<Void> renewToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = getRefreshToken(request);
-        TokenInfo tokenInfo = loginService.renewToken(refreshToken);
+        TokenInfo tokenInfo = loginService.renewToken("RT: " + refreshToken);
         loginService.setTokenCookies(response, tokenInfo);
         return ApiResponse.success();
     }

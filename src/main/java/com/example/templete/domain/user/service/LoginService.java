@@ -83,7 +83,7 @@ public class LoginService {
 
     private void saveRefreshToken(String refreshToken, String userUuid) {
         redisTemplate.opsForValue().set(
-                refreshToken, userUuid, refreshExpireTime, TimeUnit.MILLISECONDS);
+                "RT: " + refreshToken, userUuid, refreshExpireTime, TimeUnit.MILLISECONDS);
     }
 
     public void setTokenCookies(HttpServletResponse response, TokenInfo tokenInfo) {
