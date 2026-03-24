@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: templete
+
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/toy?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: '1111'
+
+  Jackson:
+    mapper:
+      sort-properties-alphabetically: false
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.example.templete.domain
+  configuration:
+    default-statement-timeout: 30
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    auto-mapping-unknown-column-behavior: none
+
+em:
+  jwt:
+    secret: 341r68yg1348rgwer7wqeroufh392784
+    expireTime: 600000
+    refreshExpireTime: 864000000
