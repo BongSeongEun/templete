@@ -11,8 +11,8 @@ public enum ErrorCode {
     USER_NOT_FOUND("USER-0001", "아이디 또는 비밀번호가 일치하지 않습니다.", HttpStatus.NOT_FOUND),
     INVALID_PASSWORD("USER-0002", "아이디 또는 비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
 
-    EXPIRED_ACCESS_TOKEN("TOKEN-0001", "액세스 토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED),
-    EXPIRED_REFRESH_TOKEN("TOKEN-0002", "리프레시 토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED),;
+    INVALID_ACCESS_TOKEN("TOKEN-0001", "유효하지 않은 액세스 토큰입니다.", HttpStatus.UNAUTHORIZED),
+    INVALID_REFRESH_TOKEN("TOKEN-0002", "유효하지 않은 리프레시 토큰입니다.", HttpStatus.UNAUTHORIZED);
 
     private final String code;
     private final String message;

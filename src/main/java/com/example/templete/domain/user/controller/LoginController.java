@@ -5,6 +5,8 @@ import com.example.templete.domain.user.model.UserSignUpRequest;
 import com.example.templete.domain.user.service.LoginService;
 import com.example.templete.global.common.ApiResponse;
 import com.example.templete.global.security.TokenInfo;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +24,7 @@ public class LoginController {
     }
 
     @PostMapping("/signUp")
-    public ApiResponse<Void> signUp(@RequestBody UserSignUpRequest userSignUpRequest){
+    public ApiResponse<Void> signUp(@RequestBody UserSignUpRequest userSignUpRequest) {
         loginService.signUp(userSignUpRequest);
         return ApiResponse.success();
     }
@@ -30,23 +32,27 @@ public class LoginController {
     @PostMapping("/login")
     public ApiResponse<Void> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
         TokenInfo tokenInfo = loginService.login(userLoginRequest);
-        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", tokenInfo.accessToken())
-                .httpOnly(true)
-                .path("/")
-                .maxAge(600)
-                .sameSite("Strict") // 도메인 제한
-                .build();
-
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokenInfo.refreshToken())
-                .httpOnly(true)
-                .path("/")
-                .maxAge(604800)
-                .sameSite("Strict") // 도메인 제한
-                .build();
-
-        response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        loginService.setTokenCookies(response, tokenInfo);
         return ApiResponse.success();
     }
 
+    @PostMapping("/renewToken")
+    public ApiResponse<Void> renewToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = getRefreshToken(request);
+        TokenInfo tokenInfo = loginService.renewToken(refreshToken);
+        loginService.setTokenCookies(response, tokenInfo);
+        return ApiResponse.success();
+    }
+
+    private String getRefreshToken(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
 }

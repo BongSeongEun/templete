@@ -8,6 +8,13 @@
         WHERE login_id = #{loginId}
     </select>
 
+    <select id="selectUserByUuid" resultType="UserLoginResponse">
+        SELECT
+            user_uuid, login_password, user_name, role
+        FROM user
+        WHERE user_uuid = #{userUuid}
+    </select>
+
     <insert id="insertUser">
         INSERT INTO user (user_name, login_id, login_password)
         VALUES (#{userName}, #{loginId}, #{loginPassword})

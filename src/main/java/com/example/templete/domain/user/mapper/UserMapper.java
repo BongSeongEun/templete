@@ -9,5 +9,7 @@ public interface UserMapper {
 
     UserLoginResponse selectUserById(String loginId);
 
+    UserLoginResponse selectUserByUuid(String userUuid);
+
     void insertUser(User user);
 }
